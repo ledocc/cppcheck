@@ -273,3 +273,35 @@ std::string Path::join(std::string path1, std::string path2) {
         return path2;
     return ((path1.back() == '/') ? path1 : (path1 + "/")) + path2;
 }
+
+namespace {
+
+std::string resolveOriginPlaceHolder(std::string path, const std::string & originValue)
+{
+    static const std::string s_origin{"$ORIGIN"};
+
+    auto pos = path.find(s_origin);
+    if (pos != std::string::npos) {
+        path.replace(pos, s_origin.size(), originValue);
+    }
+
+    return path;
+}
+
+std::string getFilesDirFromEnvOrBuildDefine()
+{
+    const auto env_filesdir = std::getenv("CPPCHECK_FILESDIR");
+    if (env_filesdir) {
+        return env_filesdir;
+    }
+
+    return FILESDIR;
+}
+
+} // namespace
+
+const std::string & Path::getFilesDir(const char exename[]) {
+    static std::string s_filesdir = resolveOriginPlaceHolder(getFilesDirFromEnvOrBuildDefine(),
+							     getCurrentExecutablePath(exename));
+    return s_filesdir;
+}

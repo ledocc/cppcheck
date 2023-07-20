@@ -84,10 +84,10 @@ Settings::Settings()
 void Settings::loadCppcheckCfg()
 {
     std::string fileName = Path::getPathFromFilename(exename) + "cppcheck.cfg";
-#ifdef FILESDIR
-    if (Path::fileExists(FILESDIR "/cppcheck.cfg"))
-        fileName = FILESDIR "/cppcheck.cfg";
-#endif
+
+    std::string filesDir = Path::getFilesDir(exename.c_str());
+    if (Path::fileExists(filesDir + "/cppcheck.cfg"))
+        fileName = filesDir + "/cppcheck.cfg";
 
     std::ifstream fin(fileName);
     if (!fin.is_open())

@@ -191,6 +191,13 @@ public:
      * join 2 paths with '/' separators
      */
     static std::string join(std::string path1, std::string path2);
+
+    /**
+     * @brief Provide FILESDIR path define at build time with $ORIGIN placeholder resolved.
+     * @param exename used to resolv $ORIGIN placeholder if use in FILESDIR.
+     * @return resolved FILESDIR
+     */
+    static const std::string & getFilesDir(const char exename[]);
 };
 
 /// @}

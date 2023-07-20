@@ -103,15 +103,18 @@ Library::Error Library::load(const char exename[], const char path[])
         }
 
         std::list<std::string> cfgfolders;
-#ifdef FILESDIR
-        cfgfolders.emplace_back(FILESDIR "/cfg");
-#endif
+        auto filesDir = Path::getFilesDir(exename);
+        if (! filesDir.empty()) {
+            cfgfolders.emplace_back(filesDir + "/cfg");
+        }
         if (exename) {
             const std::string exepath(Path::fromNativeSeparators(Path::getPathFromFilename(Path::getCurrentExecutablePath(exename))));
             cfgfolders.push_back(exepath + "cfg");
             cfgfolders.push_back(exepath + "../cfg");
+            cfgfolders.push_back(exepath + "../share/Cppcheck/cfg");
             cfgfolders.push_back(exepath);
         }
+
 
         while (error == tinyxml2::XML_ERROR_FILE_NOT_FOUND && !cfgfolders.empty()) {
             const std::string cfgfolder(cfgfolders.back());

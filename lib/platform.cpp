@@ -210,13 +210,13 @@ bool cppcheck::Platform::loadFromFile(const char exename[], const std::string &f
         filenames.push_back(Path::getPathFromFilename(Path::fromNativeSeparators(exename)) + "platforms/" + filename);
         filenames.push_back(Path::getPathFromFilename(Path::fromNativeSeparators(exename)) + "platforms/" + filename + ".xml");
     }
-#ifdef FILESDIR
-    std::string filesdir = FILESDIR;
+
+    std::string filesdir = Path::getFilesDir(exename);
     if (!filesdir.empty() && filesdir[filesdir.size()-1] != '/')
         filesdir += '/';
     filenames.push_back(filesdir + ("platforms/" + filename));
     filenames.push_back(filesdir + ("platforms/" + filename + ".xml"));
-#endif
+
 
     // open file..
     tinyxml2::XMLDocument doc;

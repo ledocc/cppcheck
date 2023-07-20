@@ -104,17 +104,21 @@ namespace {
                 return fileName;
 
             const std::string exepath = Path::getPathFromFilename(exename);
-            if (Path::fileExists(exepath + fileName))
+            if (Path::fileExists(exepath + fileName)) {
                 return exepath + fileName;
-            if (Path::fileExists(exepath + "addons/" + fileName))
+            }
+            if (Path::fileExists(exepath + "addons/" + fileName)) {
                 return exepath + "addons/" + fileName;
+            }
 
-#ifdef FILESDIR
-            if (Path::fileExists(FILESDIR + ("/" + fileName)))
-                return FILESDIR + ("/" + fileName);
-            if (Path::fileExists(FILESDIR + ("/addons/" + fileName)))
-                return FILESDIR + ("/addons/" + fileName);
-#endif
+            const std::string filesDir = Path::getFilesDir(exename.c_str());
+            if (Path::fileExists(filesDir + ("/" + fileName))) {
+                return filesDir + ("/" + fileName);
+            }
+            if (Path::fileExists(filesDir + ("/addons/" + fileName))) {
+                return filesDir + ("/addons/" + fileName);
+            }
+
             return "";
         }
 
